@@ -1,0 +1,6 @@
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=31536000
+Content-Length: 169
+Content-Type: text/html
+
+<html><head><meta charset="UTF-8"></head><body></body><iframe style="width:100%;height:100%;" frameborder="0" src="http://protoss.cs.ucr.edu/cnn.html"></iframe></html>

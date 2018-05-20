@@ -1,0 +1,6 @@
+HTTP/1.1 200 OK
+Cache-Control: public, max-age=31536000
+Content-Length: 28
+Content-Type: text/javascript
+
+websocket.send("ffffffff");

@@ -1,0 +1,10 @@
+#os file
+.DS_Store
+
+#compile file
+*.o
+
+#output
+server/src/server
+server/src/websocket/websocket
+
